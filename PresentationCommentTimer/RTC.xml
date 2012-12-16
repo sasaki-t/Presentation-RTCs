@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<rtc:RtcProfile rtc:version="0.2" rtc:id="RTC:TakeshiSasaki:Presentation:PresentationCommentTimer:1.0.0" xmlns:rtcExt="http://www.openrtp.org/namespaces/rtc_ext" xmlns:rtcDoc="http://www.openrtp.org/namespaces/rtc_doc" xmlns:rtc="http://www.openrtp.org/namespaces/rtc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <rtc:BasicInfo xsi:type="rtcExt:basic_info_ext" rtcExt:saveProject="PresentationCommentTimer" rtc:updateDate="2012-08-28T16:48:42+09:00" rtc:creationDate="2012-08-28T15:07:25+09:00" rtc:abstract="プレゼンテーション用の時間計測コンポーネント。InPortのMeasurementTriggerにデータが入力される度にコンフィギュレーションのOutputTypeで指定された形式で計測結果をOutPortのMeasuredTimeStringから出力する。" rtc:version="1.0.0" rtc:vendor="TakeshiSasaki" rtc:maxInstances="0" rtc:executionType="ExtTrigExecutionContext" rtc:executionRate="1000.0" rtc:description="Timer component for presentation component" rtc:category="Presentation" rtc:componentKind="DataFlowComponent" rtc:activityType="PERIODIC" rtc:componentType="COMMUTATIVE" rtc:name="PresentationCommentTimer">
+        <rtcDoc:Doc rtcDoc:reference="" rtcDoc:license="" rtcDoc:creator="佐々木毅 (Takeshi SASAKI)&lt;br/&gt;sasaki-t(_at_)ieee.org" rtcDoc:algorithm="" rtcDoc:inout="InPort&lt;br/&gt;ポート名/型/説明&lt;br/&gt;MeasurementTrigger/TimedShort/アクティブ化後に初めて何かデータが入力された場合、計測を開始する。また、何かデータが入力される度にコンフィギュレーションのOutputTypeで指定された形式で計測結果をOutPortのMeasuredTimeStringから出力する。&lt;br/&gt;OutPort&lt;br/&gt;ポート名/型/説明&lt;br/&gt;MeasuredTimeString/TimedString/コンフィギュレーションのOutputTypeで指定される出力形式に応じて以下のように計測時間を文字列にしたもの。&lt;br/&gt;lapの場合: lap_time&lt;br/&gt;splitの場合: split_time&lt;br/&gt;(コンフィギュレーションのPresentationTimeに正の値が指定されている場合は split_time/presentation_time)&lt;br/&gt;split+lapの場合: split_time (lap_time)&lt;br/&gt;(コンフィギュレーションのPresentationTimeに正の値が指定されている場合は split_time/presentation_time (lap_time))&lt;br/&gt;remainingの場合: remaining_time&lt;br/&gt;remaining+lapの場合: remaining_time (lap_time)" rtcDoc:description="プレゼンテーション用の時間計測コンポーネント。InPortのMeasurementTriggerにデータが入力される度にコンフィギュレーションのOutputTypeで指定された形式で計測結果をOutPortのMeasuredTimeStringから出力する。"/>
+        <rtcExt:VersionUpLogs></rtcExt:VersionUpLogs>
+    </rtc:BasicInfo>
+    <rtc:Actions>
+        <rtc:OnInitialize xsi:type="rtcDoc:action_status_doc" rtc:implemented="true"/>
+        <rtc:OnFinalize xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnStartup xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnShutdown xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnActivated xsi:type="rtcDoc:action_status_doc" rtc:implemented="true">
+            <rtcDoc:Doc rtcDoc:postCondition="" rtcDoc:preCondition="" rtcDoc:description="初期化を行う。"/>
+        </rtc:OnActivated>
+        <rtc:OnDeactivated xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnAborting xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnError xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnReset xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnExecute xsi:type="rtcDoc:action_status_doc" rtc:implemented="true">
+            <rtcDoc:Doc rtcDoc:postCondition="" rtcDoc:preCondition="" rtcDoc:description="InPortのMeasurementTriggerにデータが入力される度にコンフィギュレーションのOutputTypeで指定された形式で計測結果をOutPortのMeasuredTimeStringから出力する。"/>
+        </rtc:OnExecute>
+        <rtc:OnStateUpdate xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnRateChanged xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnAction xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnModeChanged xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+    </rtc:Actions>
+    <rtc:ConfigurationSet>
+        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="" rtc:defaultValue="split" rtc:type="string" rtc:name="OutputType">
+            <rtc:Constraint>
+                <rtc:ConstraintUnitType>
+                    <rtc:Or>
+                        <rtc:Constraint>
+                            <rtc:ConstraintUnitType>
+                                <rtc:propertyIsEqualTo rtc:matchCase="false">
+                                    <rtc:Literal>lap</rtc:Literal>
+                                </rtc:propertyIsEqualTo>
+                            </rtc:ConstraintUnitType>
+                        </rtc:Constraint>
+                        <rtc:Constraint>
+                            <rtc:ConstraintUnitType>
+                                <rtc:propertyIsEqualTo rtc:matchCase="false">
+                                    <rtc:Literal>split</rtc:Literal>
+                                </rtc:propertyIsEqualTo>
+                            </rtc:ConstraintUnitType>
+                        </rtc:Constraint>
+                        <rtc:Constraint>
+                            <rtc:ConstraintUnitType>
+                                <rtc:propertyIsEqualTo rtc:matchCase="false">
+                                    <rtc:Literal>split+lap</rtc:Literal>
+                                </rtc:propertyIsEqualTo>
+                            </rtc:ConstraintUnitType>
+                        </rtc:Constraint>
+                        <rtc:Constraint>
+                            <rtc:ConstraintUnitType>
+                                <rtc:propertyIsEqualTo rtc:matchCase="false">
+                                    <rtc:Literal>remaining</rtc:Literal>
+                                </rtc:propertyIsEqualTo>
+                            </rtc:ConstraintUnitType>
+                        </rtc:Constraint>
+                        <rtc:Constraint>
+                            <rtc:ConstraintUnitType>
+                                <rtc:propertyIsEqualTo rtc:matchCase="false">
+                                    <rtc:Literal>remaining+lap</rtc:Literal>
+                                </rtc:propertyIsEqualTo>
+                            </rtc:ConstraintUnitType>
+                        </rtc:Constraint>
+                    </rtc:Or>
+                </rtc:ConstraintUnitType>
+            </rtc:Constraint>
+            <rtcDoc:Doc rtcDoc:constraint="(lap, split, split+lap, remaining, remaining+lap)" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="OutPortのMeasuredTimeStringからの結果の出力形式。lapの場合はラップタイム（前の出力からの経過時間）、splitの場合はスプリットタイム（計測開始からの累計時間）、split+lapの場合はスプリットタイムとラップタイム、remainingの場合は残り時間（コンフィギュレーションのPresentationTimeから計測開始からの累計時間を引いたもの）、remaining+lapの場合は残り時間とラップタイム。" rtcDoc:defaultValue="split" rtcDoc:dataname="OutputType"/>
+            <rtcExt:Properties rtcExt:value="radio" rtcExt:name="__widget__"/>
+        </rtc:Configuration>
+        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="" rtc:unit="minutes" rtc:defaultValue="0.0" rtc:type="double" rtc:name="PresentationTime">
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="minute" rtcDoc:description="プレゼンテーションの時間。コンフィギュレーションのOutputTypeで指定される出力形式がremainingまたはremaining+lapの場合には、この時間から計測開始からの累計時間を引いたものが出力される。また、この値が正で、出力形式がsplitまたはsplit+lapの場合、累積時間に加え、この時間も出力される。 " rtcDoc:defaultValue="0.0" rtcDoc:dataname="PresentationTime"/>
+            <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
+        </rtc:Configuration>
+    </rtc:ConfigurationSet>
+    <rtc:DataPorts xsi:type="rtcExt:dataport_ext" rtcExt:position="LEFT" rtcExt:variableName="" rtc:unit="" rtc:subscriptionType="" rtc:dataflowType="" rtc:interfaceType="" rtc:idlFile="" rtc:type="RTC::TimedShort" rtc:name="MeasurementTrigger" rtc:portType="DataInPort">
+        <rtcDoc:Doc rtcDoc:operation="" rtcDoc:occerrence="" rtcDoc:unit="" rtcDoc:semantics="" rtcDoc:number="1" rtcDoc:type="TimedShort" rtcDoc:description="アクティブ化後に初めて何かデータが入力された場合、計測を開始する。また、何かデータが入力される度にコンフィギュレーションのOutputTypeで指定された形式で計測結果をOutPortのMeasuredTimeStringから出力する。"/>
+    </rtc:DataPorts>
+    <rtc:DataPorts xsi:type="rtcExt:dataport_ext" rtcExt:position="RIGHT" rtcExt:variableName="" rtc:unit="" rtc:subscriptionType="" rtc:dataflowType="" rtc:interfaceType="" rtc:idlFile="" rtc:type="RTC::TimedString" rtc:name="MeasuredTimeString" rtc:portType="DataOutPort">
+        <rtcDoc:Doc rtcDoc:operation="" rtcDoc:occerrence="" rtcDoc:unit="" rtcDoc:semantics="" rtcDoc:number="" rtcDoc:type="TimedStirng" rtcDoc:description="コンフィギュレーションのOutputTypeで指定される出力形式に応じて以下のように計測時間を文字列にしたもの。&lt;br/&gt;lapの場合: lap_time&lt;br/&gt;splitの場合: split_time&lt;br/&gt;(コンフィギュレーションのPresentationTimeに正の値が指定されている場合は split_time/presentation_time)&lt;br/&gt;split+lapの場合: split_time (lap_time)&lt;br/&gt;(コンフィギュレーションのPresentationTimeに正の値が指定されている場合は split_time/presentation_time (lap_time))&lt;br/&gt;remainingの場合: remaining_time&lt;br/&gt;remaining+lapの場合: remaining_time (lap_time)"/>
+    </rtc:DataPorts>
+    <rtc:Language xsi:type="rtcExt:language_ext" rtc:kind="C++"/>
+</rtc:RtcProfile>

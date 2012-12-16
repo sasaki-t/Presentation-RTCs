@@ -1,0 +1,54 @@
+# ConsoleInString CMake config file
+#
+# This file sets the following variables:
+# ConsoleInString_FOUND - Always TRUE.
+# ConsoleInString_INCLUDE_DIRS - Directories containing the ConsoleInString include files.
+# ConsoleInString_IDL_DIRS - Directories containing the ConsoleInString IDL files.
+# ConsoleInString_LIBRARIES - Libraries needed to use ConsoleInString.
+# ConsoleInString_DEFINITIONS - Compiler flags for ConsoleInString.
+# ConsoleInString_VERSION - The version of ConsoleInString found.
+# ConsoleInString_VERSION_MAJOR - The major version of ConsoleInString found.
+# ConsoleInString_VERSION_MINOR - The minor version of ConsoleInString found.
+# ConsoleInString_VERSION_REVISION - The revision version of ConsoleInString found.
+# ConsoleInString_VERSION_CANDIDATE - The candidate version of ConsoleInString found.
+
+message(STATUS "Found ConsoleInString-@PROJECT_VERSION@")
+set(ConsoleInString_FOUND TRUE)
+
+find_package(<dependency> REQUIRED)
+
+#set(ConsoleInString_INCLUDE_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@"
+#    ${<dependency>_INCLUDE_DIRS}
+#    )
+#
+#set(ConsoleInString_IDL_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@/idl")
+set(ConsoleInString_INCLUDE_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@"
+    ${<dependency>_INCLUDE_DIRS}
+    )
+set(ConsoleInString_IDL_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@/idl")
+
+
+if(WIN32)
+    set(ConsoleInString_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_STATIC_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+else(WIN32)
+    set(ConsoleInString_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_SHARED_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+endif(WIN32)
+
+set(ConsoleInString_DEFINITIONS ${<dependency>_DEFINITIONS})
+
+set(ConsoleInString_VERSION @PROJECT_VERSION@)
+set(ConsoleInString_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(ConsoleInString_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(ConsoleInString_VERSION_REVISION @PROJECT_VERSION_REVISION@)
+set(ConsoleInString_VERSION_CANDIDATE @PROJECT_VERSION_CANDIDATE@)
+

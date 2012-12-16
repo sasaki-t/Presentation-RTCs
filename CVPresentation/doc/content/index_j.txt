@@ -1,0 +1,147 @@
+CVPresentation - 日本語
+=======================
+
+
+はじめに
+========
+
+クラスについては、 `APIドキュメンテーション`_ に参照してください。
+
+.. _`APIドキュメンテーション`:
+   doxygen/html/index.html
+
+条件
+====
+
+CVPresentationはOpenRTM-aist 1.0.0以上のC++版が必要です。
+
+CVPresentationは CMake_ を使います。CMake 2.8以上が必要です。
+
+.. _CMAke:
+   http://www.cmake.org
+
+インストール
+============
+
+インストーラ
+------------
+
+Windowsのユーザはインストーラパッケージを使用してコンポーネントをインストール
+することができます。これはコンポーネント及びそのすべての必要なライブラリを
+インストールします。Windowsでインストールする場合、インストーラの使用を推奨してます。
+
+- インストーラをダウンロードしてください。
+- インストールを始めるためにインストーラをダブルクリックしてください。
+- 指示にしたがってコンポーネントをインストールしてください。
+- 環境変数の変更を適用するため、コンポーネントを使用する前にコンピューターを
+  再起動する必要があるかもしれません。
+
+CVPresentationは ``CVPresentationComp`` の実行をダブルクリックして実行することが
+できます。あるいは、 ``CVPresentation`` を初期化関数の ``CVPresentationInit`` を利用して、
+マネージャにロードすることができます。
+
+ソースから
+----------
+
+ソースを使う場合は以下の手順でインストールしてください。
+
+- ソースをダウンロードして解凍してください::
+
+    tar -xvzf CVPresentation-1.0.0.tar.gz
+
+- 解凍されたフォルダに入ってください::
+
+    cd CVPresentation-1.0.0
+
+- ``build`` フォルダを作ってください::
+
+    mkdir build
+
+- `` build`` フォルダに入ってください::
+
+    cd build
+
+- CMakeを実行してください::
+
+    cmake ../
+
+- エラーが出無い場合、makeを実行してください::
+
+    make
+
+- ``make install`` でコンポーネントをインストールしてください。選択された
+  インストール場所に書き込み権限があるかを確認してください::
+
+  ``make install``
+
+- インストールする場所はccmakeを実行して ``CMAKE_INSTALL_PREFIX`` を
+  設定することで変更が可能です。
+
+    ccmake ../
+
+ここまでで、コンポーネントが使えるようになりました。コンフィグレーションは次のセクションを
+参照してください。
+
+CVPresentationは ``CVPresentationComp`` を実行（ ``${prefix}/components/bin`` に
+インストールされます）することでスタンドアローンモードで実行することができます。
+あるいは、 ``libCVPresentation.so`` を初期化関数の ``CVPresentationInit`` を利用して、
+マネージャにロードすることができます。このライブラリは ``${prefix}/components/lib`` 
+または ``${prefix}/components/lib64`` にインストールされます。
+
+
+コンフィグレーション
+====================
+
+使えるコンフィグレーションパラメータは以下のテーブルを参照
+してください。
+
+================ ================== ================ ====
+パラメータ       データ型           デフォルト値     意味
+================ ================== ================ ====
+SlideFilePath    string             ./               スライドが保存されているパス。
+SlideFileName    string             test***.jpg      スライドの名前。通し番号の部分はアスタリスク(*)としておく。例えば、スライドが"test1.jpg", "test2.jpg", ..., "test10.jpg", ...の場合には"test*.jpg"を指定する。スライドが"test001.jpg", "test002.jpg", ..., "test010.jpg", ...のように通し番号が最低3桁で表されている場合は"test***.jpg"を指定する。<br/><br/>なお、スライドはOpenCVでサポートされている画像形式である必要がある。
+SlideFileInitialNumber int                1                スライド番号の初期値。例えば、最初のスライドが"test1.jpg"の場合には1を指定する。
+SlideNumberInRelative int                1                InPortのSlideNumberInからスライド番号をスライドの絶対番号(例: test3.jpgの場合は3)で指定する場合は0、現在のスライドからの相対的な番号で指定する場合は1。
+SlideSizeWidth   int                0                表示するスライドの幅。SlideSizeWidthとSlideSizeHeightがともに0の場合、元々の画像サイズでスライドを表示する。一方が正で他方が0の場合は、正の値のみを利用し、元の画像と同じアスペクト比になるようにスライドを表示する。
+SlideSizeHeight  int                0                表示するスライドの高さ。SlideSizeWidthとSlideSizeHeightがともに0の場合、元々の画像サイズでスライドを表示する。一方が正で他方が0の場合は、正の値のみを利用し、元の画像と同じアスペクト比になるようにスライドを表示する。
+CommentColorRGB  std::vector<int>   0,0,0            コメントの文字の色(RGB)。
+CommentSize      double             1.0              コメントの文字の大きさ（スケール）。
+CommentBaseSpeed int                4                コメントの文字が流れる基本速度。
+PenColorRGB      std::vector<int>   255,0,0          ペンの色(RGB)。
+PenThickness     int                4                ペンの太さ。
+================ ================== ================ ====
+
+ポート
+======
+
+コンポーネントによって提供されるポートは以下のテーブルで述べられています。
+
+=============== =========== ============================== ====
+ポート名        ポート型    データ型                       意味
+=============== =========== ============================== ====
+SlideNumberIn   InPort      RTC::TimedShort                表示するスライドの番号。<br/>コンフィギュレーションを指定すれば、スライドの絶対番号(例: test003.jpgの場合は3)で指定することも、現在のスライドからの相対的な番号で指定することも可能。
+Pen             InPort      RTC::TimedShortSeq             スライドに表示する線分・点の座標(x1,y1), (x2,y2),...。<br/>コンフィギュレーションで指定されたパラメータで、座標が2点以上の場合は指定された座標の間に線分を、座標が1点のみの場合はその座標に点を描画する。
+Comment         InPort      RTC::TimedString               スライドに表示するコメント。コンフィギュレーションで指定されたパラメータで表示する。有効なのは半角英数字のみ。
+SlideNumberOut  OutPort     RTC::TimedShort                現在のスライド番号。スライド番号が変更された場合に出力される。
+Key             OutPort     RTC::TimedChar                 スライドのウインドウがアクティブのときにキーボードから入力された値。
+MouseEvent      OutPort     RTC::TimedShortSeq             スライド上で発生したマウスイベント(CV_EVENT_*: 左ボタンが押された、など)、その座標(x,y)、フラグ(CV_EVENT_FLAG_*: 左ボタンが押されている、など)。
+SlideSizeInfo   ServicePort Slide::SlideSizeInfo           スライドの画像の幅と高さを取得するためのインタフェース。<br/>short getWidth(); //スライドの画像の幅を取得<br/>short getHeight(); //スライドの画像の高さを取得
+=============== =========== ============================== ====
+
+例
+==
+
+例のrtc.confファイルは ``${prefix}/components/share/CVPresentation/examples/conf/``
+フォルダにインストールされています。
+
+Changelog
+=========
+
+
+License
+=======
+
+このソフトウェアは産業技術総合研究所で開発されています。承認番号はH23PRO-????
+です。このソフトウェアは Lesser General Public License (LGPL) ライセンスとして
+公開されてます。COPYING.LESSER を参照してください。
+

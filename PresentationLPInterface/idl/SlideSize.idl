@@ -1,0 +1,11 @@
+#ifndef SLIDE_SIZE_IDL
+#define SLIDE_SIZE_IDL
+
+module Slide{
+	interface SlideSizeInfo{
+		short getWidth(); //get slide image width
+		short getHeight(); //get slide image height
+	};
+};
+
+#endif

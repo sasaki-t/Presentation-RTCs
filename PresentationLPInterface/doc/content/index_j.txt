@@ -1,0 +1,142 @@
+PresentationLPInterface - 日本語
+=======================
+
+
+はじめに
+========
+
+クラスについては、 `APIドキュメンテーション`_ に参照してください。
+
+.. _`APIドキュメンテーション`:
+   doxygen/html/index.html
+
+条件
+====
+
+PresentationLPInterfaceはOpenRTM-aist 1.0.0以上のC++版が必要です。
+
+PresentationLPInterfaceは CMake_ を使います。CMake 2.8以上が必要です。
+
+.. _CMAke:
+   http://www.cmake.org
+
+インストール
+============
+
+インストーラ
+------------
+
+Windowsのユーザはインストーラパッケージを使用してコンポーネントをインストール
+することができます。これはコンポーネント及びそのすべての必要なライブラリを
+インストールします。Windowsでインストールする場合、インストーラの使用を推奨してます。
+
+- インストーラをダウンロードしてください。
+- インストールを始めるためにインストーラをダブルクリックしてください。
+- 指示にしたがってコンポーネントをインストールしてください。
+- 環境変数の変更を適用するため、コンポーネントを使用する前にコンピューターを
+  再起動する必要があるかもしれません。
+
+PresentationLPInterfaceは ``PresentationLPInterfaceComp`` の実行をダブルクリックして実行することが
+できます。あるいは、 ``PresentationLPInterface`` を初期化関数の ``PresentationLPInterfaceInit`` を利用して、
+マネージャにロードすることができます。
+
+ソースから
+----------
+
+ソースを使う場合は以下の手順でインストールしてください。
+
+- ソースをダウンロードして解凍してください::
+
+    tar -xvzf PresentationLPInterface-1.0.0.tar.gz
+
+- 解凍されたフォルダに入ってください::
+
+    cd PresentationLPInterface-1.0.0
+
+- ``build`` フォルダを作ってください::
+
+    mkdir build
+
+- `` build`` フォルダに入ってください::
+
+    cd build
+
+- CMakeを実行してください::
+
+    cmake ../
+
+- エラーが出無い場合、makeを実行してください::
+
+    make
+
+- ``make install`` でコンポーネントをインストールしてください。選択された
+  インストール場所に書き込み権限があるかを確認してください::
+
+  ``make install``
+
+- インストールする場所はccmakeを実行して ``CMAKE_INSTALL_PREFIX`` を
+  設定することで変更が可能です。
+
+    ccmake ../
+
+ここまでで、コンポーネントが使えるようになりました。コンフィグレーションは次のセクションを
+参照してください。
+
+PresentationLPInterfaceは ``PresentationLPInterfaceComp`` を実行（ ``${prefix}/components/bin`` に
+インストールされます）することでスタンドアローンモードで実行することができます。
+あるいは、 ``libPresentationLPInterface.so`` を初期化関数の ``PresentationLPInterfaceInit`` を利用して、
+マネージャにロードすることができます。このライブラリは ``${prefix}/components/lib`` 
+または ``${prefix}/components/lib64`` にインストールされます。
+
+
+コンフィグレーション
+====================
+
+使えるコンフィグレーションパラメータは以下のテーブルを参照
+してください。
+
+================ ================== ================ ====
+パラメータ       データ型           デフォルト値     意味
+================ ================== ================ ====
+DetectLuminanceDiff int                30               入力画像のある点の輝度が背景画像のその点の輝度よりもこの値以上大きい場合、検出の候補点となる。
+DetectBgUpdate   int                5                閾値処理で得られた候補点の数がこの値以上の場合、背景は大きく変化してしまっているものと考え、背景を更新する。ただし、この値が負の場合は、何点検出されても背景を更新しない。
+DetectUpdateTime double             0.5              最新の検出から次の検出までの時間がこの値以下の場合、2つの点は連続したものとして考える。<br/>（毎ステップ確実に検出できるとは限らないため、プレゼンテーションコンポーネントで線を描画した場合に途切れ途切れになることを避ける等の目的で使用。）
+ScreenZ          double             0.0              スクリーン平面のz座標。スクリーンをz=(一定)の平面と考え、単眼カメラで位置を出すために使用。
+SlideChangeArea  string             top              スライドのページを変更するためのコマンドを生成する領域を定義する。この値がtopの場合は画像の上端、leftの場合は画像の左端、rightの場合は画像の右端、bottomの場合は画像の下端を基準とし、コンフィギュレーションのSlideChangeAreaSizeで指定された範囲までの領域（例えば、SlideChangeAreaがtop、SlideChangeAreaSizeが10なら画像の上端から10画素の範囲、つまり10×画像幅の矩形領域）を範囲とする。
+SlideChangeAreaSize int                50               スライドのページを変更するためのコマンドを生成する領域を定義する。コンフィギュレーションのSlideChangeAreaがtopの場合は画像の上端、leftの場合は画像の左端、rightの場合は画像の右端、bottomの場合は画像の下端を基準とし、この値で指定された範囲までの領域（例えば、SlideChangeAreaがtop、SlideChangeAreaSizeが10なら画像の上端から10画素の範囲、つまり10×画像幅の矩形領域）を範囲とする。
+SlideChangeCount int                5                コンフィギュレーションのSlideChangeAreaとSlideChangeAreaSizeで指定された領域のある部分でSlideChangeCount回以上連続して点が検出された場合に、スライドを変更するコマンドを生成する。<br/>命令の種類は、領域の左側1/3（SlideChangeAreaがtopまたはbottomのとき）または上側1/3（leftまたはrightのとき）で検出された場合は前のスライドへ戻すコマンド(=-1)、中央1/3で検出された場合はスライドの現在のページを再読み込みするコマンド(=0)、右側1/3（SlideChangeAreaがtopまたはbottomのとき）または下側1/3（leftまたはrightのとき）で検出された場合はスライドを次のページへ進めるコマンド(=1)とする。
+SlideChangeWait  double             1.0              このコンポーネントによってスライドが変更されたとき、この時間だけ何もせずに待つ。<br/>（スライドの変更が連続して起こったり、スライド変更直後の不要な描画を避けるため。）
+================ ================== ================ ====
+
+ポート
+======
+
+コンポーネントによって提供されるポートは以下のテーブルで述べられています。
+
+=============== =========== ============================== ====
+ポート名        ポート型    データ型                       意味
+=============== =========== ============================== ====
+Image           InPort      Img::TimedCameraImage          入力画像及び座標変換のためのカメラパラメータ。
+BgUpdateTrigger InPort      RTC::TimedShort                何かデータが入力された場合、背景画像を更新する。
+SlideRelativeCommand OutPort     RTC::TimedShort                スライドのページを変更するためのコマンドに対応する数値。コンフィギュレーションのSlideChangeAreaとSlideChangeAreaSizeで指定された領域にSlideChangeCount回以上点が検出された場合に、SlideChangeArea内の位置に応じて-1,0,1のいずれかを出力する。
+DrawPositions   OutPort     RTC::TimedShortSeq             検出された点の中で最も輝度の差が高い点の位置(x,y)。コンフィギュレーションのDetectUpdateTime以内に新たに点が検出された場合は移動を続けているものと考え、1ステップ前の位置と現在の位置(x_old, y_old, x_now, y_now)の2点を出力する。
+SlideSizeInfo   ServicePort Slide::SlideSizeInfo           スライドの画像の幅と高さを取得するためのインタフェース。<br/>short getWidth(); //スライドの画像の幅を取得<br/>short getHeight(); //スライドの画像の高さを取得
+=============== =========== ============================== ====
+
+例
+==
+
+例のrtc.confファイルは ``${prefix}/components/share/PresentationLPInterface/examples/conf/``
+フォルダにインストールされています。
+
+Changelog
+=========
+
+
+License
+=======
+
+このソフトウェアは産業技術総合研究所で開発されています。承認番号はH23PRO-????
+です。このソフトウェアは Lesser General Public License (LGPL) ライセンスとして
+公開されてます。COPYING.LESSER を参照してください。
+

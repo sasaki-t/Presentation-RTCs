@@ -1,0 +1,144 @@
+PresentationKeyDecoderName - English
+========================
+
+.. toctree::
+   :hidden:
+
+   index_j
+
+
+Introduction
+============
+
+
+For a full list of classes and functions, see the `API documentation`_.
+
+.. _`API Documentation`:
+   doxygen/html/index.html
+
+Requirements
+============
+
+PresentationKeyDecoder uses the `CMake build system`. You will need at least version
+2.8 to be able to build the component.
+
+.. _`CMAke build system`:
+   http://www.cmake.org
+
+
+Installation
+============
+
+Binary
+------
+
+Users of Windows can install the component using the binary installer. This
+will install the component and all its necessary dependencies. It is the
+recommended method of installation in Windows.
+
+- Download the installer from the website.
+- Double-click the executable file to begin installation.
+- Follow the instructions to install the component.
+- You may need to restart your computer for environment variable changes
+  to take effect before using the component.
+
+The component can be launched by double-clicking the
+``PresentationKeyDecoderComp`` executable. The ``PresentationKeyDecoder`` library
+is available for loading into a manager, using the initialisation function
+``PresentationKeyDecoderInit``.
+
+From source
+-----------
+
+Follow these steps to install PresentationKeyDecoder from source in any operating
+system:
+
+- Download the source, either from the repository or a source archive,
+  and extract it somewhere::
+
+    tar -xvzf PresentationKeyDecoder-1.0.0.tar.gz
+
+- Change to the directory containing the extracted source::
+
+    cd PresentationKeyDecoder-1.0.0
+
+- Create a directory called ``build``::
+
+    mkdir build
+
+- Change to that directory::
+
+    cd build
+
+- Run cmake or cmake-gui::
+
+    cmake ../
+
+- If no errors occurred, run make::
+
+    make
+
+- Finally, install the component. Ensure the necessary permissions to
+  install into the chosen prefix are available::
+
+    make install
+
+- The install destination can be changed by executing ccmake and changing
+  the variable ``CMAKE_INSTALL_PREFIX``::
+
+    ccmake ../
+
+The component is now ready for use. See the next section for instructions on
+configuring the component.
+
+PresentationKeyDecoder can be launched in stand-alone mode by executing the
+``PresentationKeyDecoderComp`` executable (installed into ``${prefix}/components/bin``).
+Alternatively, ``libPresentationKeyDecoder.so`` can be loaded into a manager, using the
+initialisation function ``PresentationKeyDecoderInit``. This shared object can be found in
+``${prefix}/components/lib`` or ``${prefix}/components/lib64``.
+
+
+Configuration
+=============
+
+The available configuration parameters are described below:
+
+================ ================== ================ ======
+Parameter        Data type          Default Value    Effect
+================ ================== ================ ======
+Next             std::vector<int>   10,13,32,110     ここに書かれた文字コードに相当する文字が入力されたときにスライドを次のページへ進めるコマンド(=1)を出力する。
+Previous         std::vector<int>   8,112            ここに書かれた文字コードに相当する文字が入力されたときにスライドを前のページへ戻すコマンド(=-1)を出力する。
+Reload           std::vector<int>   99,114           ここに書かれた文字コードに相当する文字が入力されたときにスライドの現在のページを再読み込みするコマンド(=0)を出力する。
+================ ================== ================ ======
+
+Ports
+=====
+
+The ports provided by the component are described below:
+
+=============== =========== ============================== =======
+Name            Type        Data type                      Purpose
+=============== =========== ============================== =======
+Key             InPort      RTC::TimedChar                 入力文字。
+SlideRelativeCommand OutPort     RTC::TimedShort                スライドのページを変更するためのコマンドに対応する数値。InPortのKeyへの入力文字がコンフィギュレーションのNextのいずれかに一致するときは1,Previousのいずれかに一致するときは-1,Reloadのいずれかに一致するときは0。同じ文字コードが複数のコンフィギュレーションで指定されていた場合、優先順位はNext,Previous,Reloadの順となる。
+=============== =========== ============================== =======
+
+Examples
+========
+
+An example configuration file is provided in the
+``${prefix}/components/share/PresentationKeyDecoder/examples/conf/`` directory.
+
+Changelog
+=========
+
+
+
+License
+=======
+
+This software is developed at the National Institute of Advanced
+Industrial Science and Technology. Approval number H23PRO-????. This
+software is licensed under the Lesser General Public License. See
+COPYING.LESSER.
+
