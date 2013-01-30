@@ -12,7 +12,7 @@
 
 #include <iostream>
 #include <string>
-#include <cv.h>
+//#include <cv.h>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
@@ -39,7 +39,7 @@ static const char* cvpresentation_spec[] =
     "implementation_id", "CVPresentation",
     "type_name",         "CVPresentation",
     "description",       "Presentation component using OpenCV",
-    "version",           "1.0.0",
+    "version",           "1.1.0",
     "vendor",            "TakeshiSasaki",
     "category",          "Presentation",
     "activity_type",     "PERIODIC",
@@ -253,6 +253,14 @@ RTC::ReturnCode_t CVPresentation::onExecute(RTC::UniqueId ec_id)
   int res;
   bool update_slide = false;
 
+  //for read comment
+  std::string st;
+  std::string cmd;
+  std::string::size_type cmd_end_loc;
+  std::string cmd_first(" [");
+  std::string cmd_end("]");
+
+
   //New slide number comes -- change slide image
   if(m_SlideNumberInIn.isNew()){
     m_SlideNumberInIn.read();
@@ -302,16 +310,33 @@ RTC::ReturnCode_t CVPresentation::onExecute(RTC::UniqueId ec_id)
   //New comment comes -- store text
   if(m_CommentIn.isNew()){
     m_CommentIn.read();
-    std::string st;
     st = m_Comment.data;
     if(!st.empty()){
+      //set default parameters
       while(m_CommentColorRGB.size()<3){
         m_CommentColorRGB.push_back(0);
       }
-      Comment cmt(Comment(st, cv::FONT_HERSHEY_COMPLEX, m_CommentSize, cv::Scalar(m_CommentColorRGB[2], m_CommentColorRGB[1], m_CommentColorRGB[0])));
+      CommentGenerator cg(cv::FONT_HERSHEY_COMPLEX, m_CommentSize, cv::Scalar(m_CommentColorRGB[2], m_CommentColorRGB[1], m_CommentColorRGB[0]));
+      Comment cmt(st, cv::FONT_HERSHEY_COMPLEX, m_CommentSize, cv::Scalar(m_CommentColorRGB[2], m_CommentColorRGB[1], m_CommentColorRGB[0]));
+
+      //read command if necessary
+      if(st.substr(0,cmd_first.size())==cmd_first){ //check if the first part is cmd_first
+        cmd_end_loc=st.find(cmd_end, cmd_first.size()); //check if cmd_end found
+
+        if(cmd_end_loc!=std::string::npos){ //cmd_end found
+          // set parameters based on specified command
+          cmd = st.substr(cmd_first.size(),cmd_end_loc-cmd_first.size());
+          //std::cout << "Command=" << cmd << std::endl;
+          res = cg.setParams(cmd);
+          if(res==0){
+            st = st.substr(cmd_end_loc+cmd_end.size()); //delete command part
+            cmt = cg.generateComment(st);
+		  }
+        }
+      }
       cmtMgr.addComment(cmt);
-    }
-  }
+    } //end if(!st.empty())
+  } //end if(m_CommentIn.isNew())
 
   //Update image
   if(update_slide || !cmtMgr.empty()){ //update if (slide changed or draw something) or (comments exist in previous stem)

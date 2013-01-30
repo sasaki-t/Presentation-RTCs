@@ -69,9 +69,10 @@ using namespace RTC;
  * (x2,y2),...。コンフィギュレーションで指定されたパラメータで、座
  * 標が2点以上の場合は指定された座標の間に線分を、座標が1点のみの場
  * 合はその座標に点を描画する。
- * Comment/TimedString/スライドに表示するコメント。コンフィギュレー
- * ションで指定されたパラメータで、表示する。有効なのは半角英数字の
- * み。
+ * Comment/TimedString/スライドに表示するコメント（テキスト）。文字
+ * の大きさやサイズはコメントにコマンドを含めることで指定することが
+ * 可能。指定がない場合はコンフィギュレーションで指定されたパラメー
+ * タで表示する。有効なのは半角英数字のみ。
  * OutPort
  * ポート名/型/説明
  * SlideNumberOut/TimedShort/現在のスライド番号。スライド番号が変更
@@ -345,13 +346,13 @@ class CVPresentation
    */
   int m_SlideSizeHeight;
   /*!
-   * コメントの文字の色(RGB)。
+   * コメントの文字の色(RGB)のデフォルト値。
    * - Name: CommentColorRGB CommentColorRGB
    * - DefaultValue: 0,0,0
    */
   std::vector<int> m_CommentColorRGB;
   /*!
-   * コメントの文字の大きさ（スケール）。
+   * コメントの文字の大きさ（スケール）のデフォルト値。
    * - Name: CommentSize CommentSize
    * - DefaultValue: 1.0
    * - Constraint: x>0
@@ -403,8 +404,10 @@ class CVPresentation
   InPort<TimedShortSeq> m_PenIn;
   TimedString m_Comment;
   /*!
-   * スライドに表示するコメント。コンフィギュレーションで指定された
-   * パラメータで表示する。有効なのは半角英数字のみ。
+   * スライドに表示するコメント（テキスト）。文字の大きさやサイズは
+   * コメントにコマンドを含めることで指定することが可能。指定がない
+   * 場合はコンフィギュレーションで指定されたパラメータで表示する。
+   * 有効なのは半角英数字のみ。
    * - Type: TimedString
    */
   InPort<TimedString> m_CommentIn;

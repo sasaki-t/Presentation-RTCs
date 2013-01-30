@@ -18,6 +18,22 @@
 #include <opencv2/highgui/highgui.hpp>
 
 
+enum cpkeytype{
+	FONT, 
+	SCALE_ABS, 
+	SCALE_REL, 
+	SCALE_RATIO,
+	SCALE_ABS_WITH_THICKNESS, 
+	SCALE_REL_WITH_THICKNESS, 
+	SCALE_AND_THICKNESS_RATIO,
+	COLOR, 
+	THICKNESS_ABS,
+	THICKNESS_REL,
+	THICKNESS_RATIO,
+	THICKNESS_ABS_WITH_SCALE,
+	THICKNESS_REL_WITH_SCALE,
+};
+
 /*!
  * @class Comment
  * @brief Comment class
@@ -143,6 +159,99 @@ public:
 	 * @return true if comment list is empty
 	 */
 	bool empty(){return CmtList.empty();}
+};
+
+/*!
+ * @class CommentParamKey
+ * @brief CommentParamKey class
+ */
+class CommentParamKey{
+public:
+	std::string name;
+	enum cpkeytype type;
+
+	std::vector<double> val;
+
+	/*!
+	 * @brief Constructor
+	 */
+	CommentParamKey(){;}
+	/*!
+	 * @brief Constructor
+	 * @param n Command name
+	 * @param kt Command type
+	 * @param ret_val Return value when the command is called
+	 */
+	CommentParamKey(const char* n, cpkeytype kt, std::vector<double> ret_val){
+		initialize(n, kt, ret_val);
+	}
+
+	/*!
+	 * @brief Initialization
+	 * @param n Command name
+	 * @param kt Command type
+	 * @param ret_val Return value when the command is called
+	 */
+	int initialize(const char* n, cpkeytype kt, std::vector<double> ret_val){
+		name = n;
+		type = kt;
+		val = ret_val;
+		return 0;
+	}
+};
+
+/*!
+ * @class CommentGenerator
+ * @brief CommentGerarator class
+ */
+class CommentGenerator{
+	std::vector<CommentParamKey> keys;
+
+	//comment parameters
+	int font;
+	double scale;
+	cv::Scalar color;
+	double thick;
+
+	//utilities
+	std::vector<double> setRGBVec(double R, double G, double B);
+	int get_nonnegative_value(std::string &cmd, std::string::size_type &loc, double &value);
+
+	int checkKey(std::string &cmd, std::string::size_type &loc);
+	int checkRGB(std::string &cmd, std::string::size_type &loc);
+	int checkSIZE(std::string &cmd, std::string::size_type &loc);
+
+	int getFunctionArgs(std::string &cmd, std::string::size_type &loc, std::string &name, int argc, std::vector<double> &values);
+public:
+	/*!
+	 * @brief Constructor
+	 * @param txtfont Text font type
+	 * @param txtscale Text size
+	 * @param txtcolor Text color
+	 * @param txtthick Text thickness
+	 */
+	CommentGenerator(int txtfont = cv::FONT_HERSHEY_COMPLEX, double txtscale = 1.0, cv::Scalar txtcolor=cv::Scalar(0,0,255), double txtthick = 2){
+		setParams(txtfont, txtscale, txtcolor, txtthick);
+		resetKeys();
+	}
+	/*!
+	 * @brief Register commands
+	 */
+	void registKey(CommentParamKey k){keys.push_back(k);}
+	void resetKeys();
+
+	int setParams(int txtfont = cv::FONT_HERSHEY_COMPLEX, double txtscale = 1.0, cv::Scalar txtcolor=cv::Scalar(0,0,255), double txtthick = 2);
+	int setParams(std::string &cmd); //set parameters using string
+
+	/*!
+	 * @brief Generate comment
+	 * @param st Comment text
+	 * @param initpos Initial text position
+	 * @return Comment
+	 */
+	Comment generateComment(std::string &st,cv::Point initpos=cv::Size(-1,-1)){
+		return Comment(st, font, scale, color, (int)(thick+0.5), initpos);
+	}
 };
 
 #endif
