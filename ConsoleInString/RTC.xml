@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<rtc:RtcProfile rtc:version="0.2" rtc:id="RTC:TakeshiSasaki:example:ConsoleInString:1.0.0" xmlns:rtcExt="http://www.openrtp.org/namespaces/rtc_ext" xmlns:rtcDoc="http://www.openrtp.org/namespaces/rtc_doc" xmlns:rtc="http://www.openrtp.org/namespaces/rtc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <rtc:BasicInfo xsi:type="rtcExt:basic_info_ext" rtcExt:saveProject="ConsoleInString" rtc:updateDate="2012-08-16T21:03:26+09:00" rtc:creationDate="2012-08-16T16:30:23+09:00" rtc:abstract="コンソールから入力された文字列をOutPortのStringから出力する。" rtc:version="1.0.0" rtc:vendor="TakeshiSasaki" rtc:maxInstances="0" rtc:executionType="PeriodicExecutionContext" rtc:executionRate="1000.0" rtc:description="Console string input component" rtc:category="example" rtc:componentKind="DataFlowComponent" rtc:activityType="SPORADIC" rtc:componentType="COMMUTATIVE" rtc:name="ConsoleInString">
+<rtc:RtcProfile rtc:version="0.3" rtc:id="RTC:TakeshiSasaki:example:ConsoleInString:1.1.0" xmlns:rtc="http://www.openrtp.org/namespaces/rtc" xmlns:rtcExt="http://www.openrtp.org/namespaces/rtc_ext" xmlns:rtcDoc="http://www.openrtp.org/namespaces/rtc_doc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <rtc:BasicInfo xsi:type="rtcExt:basic_info_ext" rtcExt:saveProject="ConsoleInString" rtc:updateDate="2012-08-16T21:03:26.000+09:00" rtc:creationDate="2012-08-16T16:30:23.000+09:00" rtc:abstract="コンソールから入力された文字列をOutPortのStringから出力する。" rtc:version="1.1.0" rtc:vendor="TakeshiSasaki" rtc:maxInstances="0" rtc:executionType="PeriodicExecutionContext" rtc:executionRate="1000.0" rtc:description="Console string input component" rtc:category="example" rtc:componentKind="DataFlowComponent" rtc:activityType="SPORADIC" rtc:componentType="COMMUTATIVE" rtc:name="ConsoleInString">
         <rtcDoc:Doc rtcDoc:reference="" rtcDoc:license="" rtcDoc:creator="佐々木毅 (Takeshi SASAKI)&lt;br/&gt;sasaki-t(_at_)ieee.org" rtcDoc:algorithm="" rtcDoc:inout="OutPort&lt;br/&gt;ポート名/型/説明&lt;br/&gt;String/TimedString/コンソールから入力された文字列。" rtcDoc:description="コンソールから入力された文字列をOutPortのStringから出力する。&lt;br/&gt;アクティブ状態ではコンソールからの入力待ちをしているので、非アクティブ化する場合は非アクティブ化の指示をした後、コンソールから何か文字列を入力する必要がある。"/>
         <rtcExt:VersionUpLogs></rtcExt:VersionUpLogs>
         <rtcExt:VersionUpLogs></rtcExt:VersionUpLogs>
@@ -22,8 +22,6 @@
         </rtc:OnExecute>
         <rtc:OnStateUpdate xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
         <rtc:OnRateChanged xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
-        <rtc:OnAction xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
-        <rtc:OnModeChanged xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
     </rtc:Actions>
     <rtc:DataPorts xsi:type="rtcExt:dataport_ext" rtcExt:position="RIGHT" rtcExt:variableName="" rtc:unit="" rtc:subscriptionType="" rtc:dataflowType="" rtc:interfaceType="" rtc:idlFile="" rtc:type="RTC::TimedString" rtc:name="String" rtc:portType="DataOutPort">
         <rtcDoc:Doc rtcDoc:operation="" rtcDoc:occerrence="" rtcDoc:unit="" rtcDoc:semantics="" rtcDoc:number="" rtcDoc:type="TimedString" rtcDoc:description="コンソールから入力された文字列。"/>

@@ -127,7 +127,7 @@ public:
 	 * @param img Image to put comment
 	 */
 	void putComment(cv::Mat &img){
-		cv::putText(img, str, pos, font, scale, color, thick, CV_AA, false);
+		cv::putText(img, str, pos, font, scale, color, thick, cv::LINE_AA, false);
 	}
 };
 
@@ -148,7 +148,7 @@ public:
 	int setSpeed(int bspeed);
 	/*!
 	 * @brief Set image where comments are put
-	 * @return p pointer to the image
+	 * @param p pointer to the image
 	 */
 	void setImage(cv::Mat *p){pimg = p;}
 

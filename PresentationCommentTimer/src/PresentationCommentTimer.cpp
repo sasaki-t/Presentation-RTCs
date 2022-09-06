@@ -1,14 +1,14 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file  PresentationCommentTimer.cpp
  * @brief Timer component for presentation component
- * @date $Date$
  *
  * @author 佐々木毅 (Takeshi SASAKI)
  * sasaki-t(_at_)ieee.org
  *
- * $Id$
  */
+// </rtc-template>
 
 #include <iostream>
 #include <string>
@@ -19,12 +19,16 @@
 
 // Module specification
 // <rtc-template block="module_spec">
+#if RTM_MAJOR_VERSION >= 2
+static const char* const presentationcommenttimer_spec[] =
+#else
 static const char* presentationcommenttimer_spec[] =
+#endif
   {
     "implementation_id", "PresentationCommentTimer",
     "type_name",         "PresentationCommentTimer",
     "description",       "Timer component for presentation component",
-    "version",           "1.0.0",
+    "version",           "1.1.0",
     "vendor",            "TakeshiSasaki",
     "category",          "Presentation",
     "activity_type",     "PERIODIC",
@@ -35,11 +39,16 @@ static const char* presentationcommenttimer_spec[] =
     // Configuration variables
     "conf.default.OutputType", "split",
     "conf.default.PresentationTime", "0.0",
+
     // Widget
     "conf.__widget__.OutputType", "radio",
     "conf.__widget__.PresentationTime", "text",
     // Constraints
     "conf.__constraints__.OutputType", "(lap,split,split+lap,remaining,remaining+lap)",
+
+    "conf.__type__.OutputType", "string",
+    "conf.__type__.PresentationTime", "double",
+
     ""
   };
 // </rtc-template>
@@ -53,7 +62,6 @@ PresentationCommentTimer::PresentationCommentTimer(RTC::Manager* manager)
   : RTC::DataFlowComponentBase(manager),
     m_MeasurementTriggerIn("MeasurementTrigger", m_MeasurementTrigger),
     m_MeasuredTimeStringOut("MeasuredTimeString", m_MeasuredTimeString)
-
     // </rtc-template>
 {
 }
@@ -76,6 +84,7 @@ RTC::ReturnCode_t PresentationCommentTimer::onInitialize()
   
   // Set OutPort buffer
   addOutPort("MeasuredTimeString", m_MeasuredTimeStringOut);
+
   
   // Set service provider to Ports
   
@@ -89,8 +98,9 @@ RTC::ReturnCode_t PresentationCommentTimer::onInitialize()
   // Bind variables and configuration variable
   bindParameter("OutputType", m_OutputType, "split");
   bindParameter("PresentationTime", m_PresentationTime, "0.0");
-  
   // </rtc-template>
+
+  
   return RTC::RTC_OK;
 }
 
@@ -101,41 +111,38 @@ RTC::ReturnCode_t PresentationCommentTimer::onFinalize()
 }
 */
 
-/*
-RTC::ReturnCode_t PresentationCommentTimer::onStartup(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
 
-/*
-RTC::ReturnCode_t PresentationCommentTimer::onShutdown(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+//RTC::ReturnCode_t PresentationCommentTimer::onStartup(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+
+
+//RTC::ReturnCode_t PresentationCommentTimer::onShutdown(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 
 /*!
  * 初期化を行う。
  */
 
-RTC::ReturnCode_t PresentationCommentTimer::onActivated(RTC::UniqueId ec_id)
+RTC::ReturnCode_t PresentationCommentTimer::onActivated(RTC::UniqueId /*ec_id*/)
 {
-  start = false;
+    start = false;
 
-  while(m_MeasurementTriggerIn.isNew()){
-    m_MeasurementTriggerIn.read();
-  }
+    while (m_MeasurementTriggerIn.isNew()) {
+        m_MeasurementTriggerIn.read();
+    }
 
-  return RTC::RTC_OK;
+    return RTC::RTC_OK;
 }
 
-/*
-RTC::ReturnCode_t PresentationCommentTimer::onDeactivated(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+
+//RTC::ReturnCode_t PresentationCommentTimer::onDeactivated(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 
 /*!
  * InPortのMeasurementTriggerにデータが入力される度にコンフィギュレ
@@ -143,94 +150,94 @@ RTC::ReturnCode_t PresentationCommentTimer::onDeactivated(RTC::UniqueId ec_id)
  * edTimeStringから出力する。
  */
 
-RTC::ReturnCode_t PresentationCommentTimer::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t PresentationCommentTimer::onExecute(RTC::UniqueId /*ec_id*/)
 {
-  std::string st;
-  std::time_t current_time;
-  double lap, split, remain;
+    std::string st;
+    std::time_t current_time;
+    double lap, split, remain;
 
-  if(m_MeasurementTriggerIn.isNew()){
-    m_MeasurementTriggerIn.read();
-    if(!start){ //initialize if first time
-      start = true;
-      std::time(&start_time);
-      previous_time = start_time;
-	}
+    if (m_MeasurementTriggerIn.isNew()) {
+        m_MeasurementTriggerIn.read();
+        if (!start) { //initialize if first time
+            start = true;
+            std::time(&start_time);
+            previous_time = start_time;
+        }
 
-    //calculate lap, split, and remaining time
-    time(&current_time);
-	lap = std::difftime(current_time, previous_time);
-	split = std::difftime(current_time, start_time);
-	remain = m_PresentationTime*60 - split;
-    previous_time = current_time; //update previous time
+        //calculate lap, split, and remaining time
+        time(&current_time);
+        lap = std::difftime(current_time, previous_time);
+        split = std::difftime(current_time, start_time);
+        remain = m_PresentationTime * 60 - split;
+        previous_time = current_time; //update previous time
 
-	if(m_OutputType == "lap"){ //lap time only
-      st = convert_timediff_to_hms(lap);
-    }else if(m_OutputType == "split"){ //split time
-      st = convert_timediff_to_hms(split);
-	  if(m_PresentationTime>0){ //add expected total time if necessary
-        st.push_back('/');
-        st += convert_timediff_to_hms(m_PresentationTime*60);
-	  }
-    }else if(m_OutputType == "split+lap"){ //split time and lap time
-      st = convert_timediff_to_hms(split);
-	  if(m_PresentationTime>0){ //add expected total time if necessary
-        st.push_back('/');
-        st += convert_timediff_to_hms(m_PresentationTime*60);
-      }
-      st += " (" + convert_timediff_to_hms(lap) + ")"; //add lap time
-    }else if(m_OutputType == "remaining"){ //remaining time only
-      st = convert_timediff_to_hms(remain);
-    }else if(m_OutputType == "remaining+lap"){ //remaining time and lap time
-      st = convert_timediff_to_hms(remain);
-      st += " (" + convert_timediff_to_hms(lap) + ")"; //add lap time
-    }else{
-      std::cerr << "Invalid argument: OutputType" << std::endl;
-      return RTC::RTC_OK;
-    }
+        if (m_OutputType == "lap") { //lap time only
+            st = convert_timediff_to_hms(lap);
+        }
+        else if (m_OutputType == "split") { //split time
+            st = convert_timediff_to_hms(split);
+            if (m_PresentationTime > 0) { //add expected total time if necessary
+                st.push_back('/');
+                st += convert_timediff_to_hms(m_PresentationTime * 60);
+            }
+        }
+        else if (m_OutputType == "split+lap") { //split time and lap time
+            st = convert_timediff_to_hms(split);
+            if (m_PresentationTime > 0) { //add expected total time if necessary
+                st.push_back('/');
+                st += convert_timediff_to_hms(m_PresentationTime * 60);
+            }
+            st += " (" + convert_timediff_to_hms(lap) + ")"; //add lap time
+        }
+        else if (m_OutputType == "remaining") { //remaining time only
+            st = convert_timediff_to_hms(remain);
+        }
+        else if (m_OutputType == "remaining+lap") { //remaining time and lap time
+            st = convert_timediff_to_hms(remain);
+            st += " (" + convert_timediff_to_hms(lap) + ")"; //add lap time
+        }
+        else {
+            std::cerr << "Invalid argument: OutputType" << std::endl;
+            return RTC::RTC_OK;
+        }
 
-    setTimestamp(m_MeasuredTimeString);
-    m_MeasuredTimeString.data = st.c_str();
-    m_MeasuredTimeStringOut.write();
-  } //end if(m_MeasurementTriggerIn.isNew())
+        setTimestamp(m_MeasuredTimeString);
+        m_MeasuredTimeString.data = st.c_str();
+        m_MeasuredTimeStringOut.write();
+    } //end if(m_MeasurementTriggerIn.isNew())
 
-  return RTC::RTC_OK;
+    return RTC::RTC_OK;
 }
 
-/*
-RTC::ReturnCode_t PresentationCommentTimer::onAborting(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
 
-/*
-RTC::ReturnCode_t PresentationCommentTimer::onError(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+//RTC::ReturnCode_t PresentationCommentTimer::onAborting(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 
-/*
-RTC::ReturnCode_t PresentationCommentTimer::onReset(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
 
-/*
-RTC::ReturnCode_t PresentationCommentTimer::onStateUpdate(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+//RTC::ReturnCode_t PresentationCommentTimer::onError(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 
-/*
-RTC::ReturnCode_t PresentationCommentTimer::onRateChanged(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+
+//RTC::ReturnCode_t PresentationCommentTimer::onReset(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+
+
+//RTC::ReturnCode_t PresentationCommentTimer::onStateUpdate(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+
+
+//RTC::ReturnCode_t PresentationCommentTimer::onRateChanged(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 
 
 
@@ -245,6 +252,4 @@ extern "C"
                              RTC::Delete<PresentationCommentTimer>);
   }
   
-};
-
-
+}

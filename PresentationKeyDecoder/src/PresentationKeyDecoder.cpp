@@ -1,14 +1,14 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file  PresentationKeyDecoder.cpp
  * @brief Create slide change commands for presentation component based on input data
- * @date $Date$
  *
  * @author 佐々木毅 (Takeshi SASAKI)
  * sasaki-t(_at_)ieee.org
  *
- * $Id$
  */
+// </rtc-template>
 
 #include <iostream>
 
@@ -17,12 +17,16 @@
 
 // Module specification
 // <rtc-template block="module_spec">
+#if RTM_MAJOR_VERSION >= 2
+static const char* const presentationkeydecoder_spec[] =
+#else
 static const char* presentationkeydecoder_spec[] =
+#endif
   {
     "implementation_id", "PresentationKeyDecoder",
     "type_name",         "PresentationKeyDecoder",
     "description",       "Create slide change commands for presentation component based on input data",
-    "version",           "1.0.0",
+    "version",           "1.1.0",
     "vendor",            "TakeshiSasaki",
     "category",          "Presentation",
     "activity_type",     "PERIODIC",
@@ -34,11 +38,17 @@ static const char* presentationkeydecoder_spec[] =
     "conf.default.Next", "10,13,32,110",
     "conf.default.Previous", "8,112",
     "conf.default.Reload", "99,114",
+
     // Widget
     "conf.__widget__.Next", "text",
     "conf.__widget__.Previous", "text",
     "conf.__widget__.Reload", "text",
     // Constraints
+
+    "conf.__type__.Next", "std::vector<int>",
+    "conf.__type__.Previous", "std::vector<int>",
+    "conf.__type__.Reload", "std::vector<int>",
+
     ""
   };
 // </rtc-template>
@@ -52,7 +62,6 @@ PresentationKeyDecoder::PresentationKeyDecoder(RTC::Manager* manager)
   : RTC::DataFlowComponentBase(manager),
     m_KeyIn("Key", m_Key),
     m_SlideRelativeCommandOut("SlideRelativeCommand", m_SlideRelativeCommand)
-
     // </rtc-template>
 {
 }
@@ -75,6 +84,7 @@ RTC::ReturnCode_t PresentationKeyDecoder::onInitialize()
   
   // Set OutPort buffer
   addOutPort("SlideRelativeCommand", m_SlideRelativeCommandOut);
+
   
   // Set service provider to Ports
   
@@ -89,8 +99,9 @@ RTC::ReturnCode_t PresentationKeyDecoder::onInitialize()
   bindParameter("Next", m_Next, "10,13,32,110");
   bindParameter("Previous", m_Previous, "8,112");
   bindParameter("Reload", m_Reload, "99,114");
-  
   // </rtc-template>
+
+  
   return RTC::RTC_OK;
 }
 
@@ -101,39 +112,36 @@ RTC::ReturnCode_t PresentationKeyDecoder::onFinalize()
 }
 */
 
-/*
-RTC::ReturnCode_t PresentationKeyDecoder::onStartup(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
 
-/*
-RTC::ReturnCode_t PresentationKeyDecoder::onShutdown(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+//RTC::ReturnCode_t PresentationKeyDecoder::onStartup(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+
+
+//RTC::ReturnCode_t PresentationKeyDecoder::onShutdown(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 
 /*!
  * 初期化を行う。
  */
 
-RTC::ReturnCode_t PresentationKeyDecoder::onActivated(RTC::UniqueId ec_id)
+RTC::ReturnCode_t PresentationKeyDecoder::onActivated(RTC::UniqueId /*ec_id*/)
 {
-  while(m_KeyIn.isNew()){
-    m_KeyIn.read();
-  }
+    while (m_KeyIn.isNew()) {
+        m_KeyIn.read();
+    }
 
-  return RTC::RTC_OK;
+    return RTC::RTC_OK;
 }
 
-/*
-RTC::ReturnCode_t PresentationKeyDecoder::onDeactivated(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+
+//RTC::ReturnCode_t PresentationKeyDecoder::onDeactivated(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 
 /*!
  * InPortのKeyから文字を読み込み、コンフィギュレーションで指定した
@@ -142,91 +150,86 @@ RTC::ReturnCode_t PresentationKeyDecoder::onDeactivated(RTC::UniqueId ec_id)
  * SlideRelativeCommandから出力する。
  */
 
-RTC::ReturnCode_t PresentationKeyDecoder::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t PresentationKeyDecoder::onExecute(RTC::UniqueId /*ec_id*/)
 {
-  unsigned int i;
-  int k;
-  int res;
-  bool found = false;
+    unsigned int i;
+    int k;
+    int res;
+    bool found = false;
 
-  if(m_KeyIn.isNew()){
-    m_KeyIn.read();
-    k = (int)m_Key.data;
-    std::cout << "Input: " << m_Key.data << std::endl;
+    if (m_KeyIn.isNew()) {
+        m_KeyIn.read();
+        k = (int)m_Key.data;
+        std::cout << "Input: " << m_Key.data << std::endl;
 
-    for(i=0;i<m_Next.size();i++){ //serch Next
-      if(m_Next[i]==k){ //if found
-        res = 1; //set "Next" command
-        found = true;
-        break;
-      }
-	}
-    if(!found){
-      for(i=0;i<m_Previous.size();i++){ //serch Previous
-        if(m_Previous[i]==k){ //if found
-          res = -1; //set "Previous" command
-          found = true;
-          break;
+        for (i = 0; i < m_Next.size(); i++) { //serch Next
+            if (m_Next[i] == k) { //if found
+                res = 1; //set "Next" command
+                found = true;
+                break;
+            }
         }
-	  }
-	}
-    if(!found){
-      for(i=0;i<m_Reload.size();i++){ //serch Reload
-        if(m_Reload[i]==k){ //if found
-          res = 0; //set "Reload" command
-          found = true;
-          break;
+        if (!found) {
+            for (i = 0; i < m_Previous.size(); i++) { //serch Previous
+                if (m_Previous[i] == k) { //if found
+                    res = -1; //set "Previous" command
+                    found = true;
+                    break;
+                }
+            }
         }
-	  }
-	}
+        if (!found) {
+            for (i = 0; i < m_Reload.size(); i++) { //serch Reload
+                if (m_Reload[i] == k) { //if found
+                    res = 0; //set "Reload" command
+                    found = true;
+                    break;
+                }
+            }
+        }
 
-    //Output
-	if(found){
-      m_SlideRelativeCommand.data = res;
-      std::cout << "-> Command: " << m_SlideRelativeCommand.data << std::endl;
-      setTimestamp(m_SlideRelativeCommand);
-	  m_SlideRelativeCommandOut.write();
-    }
+        //Output
+        if (found) {
+            m_SlideRelativeCommand.data = res;
+            std::cout << "-> Command: " << m_SlideRelativeCommand.data << std::endl;
+            setTimestamp(m_SlideRelativeCommand);
+            m_SlideRelativeCommandOut.write();
+        }
 
-  }//endif(m_KeyIn.isNew())
+    }//endif(m_KeyIn.isNew())
 
-  return RTC::RTC_OK;
+    return RTC::RTC_OK;
 }
 
-/*
-RTC::ReturnCode_t PresentationKeyDecoder::onAborting(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
 
-/*
-RTC::ReturnCode_t PresentationKeyDecoder::onError(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+//RTC::ReturnCode_t PresentationKeyDecoder::onAborting(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 
-/*
-RTC::ReturnCode_t PresentationKeyDecoder::onReset(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
 
-/*
-RTC::ReturnCode_t PresentationKeyDecoder::onStateUpdate(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+//RTC::ReturnCode_t PresentationKeyDecoder::onError(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 
-/*
-RTC::ReturnCode_t PresentationKeyDecoder::onRateChanged(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+
+//RTC::ReturnCode_t PresentationKeyDecoder::onReset(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+
+
+//RTC::ReturnCode_t PresentationKeyDecoder::onStateUpdate(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+
+
+//RTC::ReturnCode_t PresentationKeyDecoder::onRateChanged(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 
 
 
@@ -241,6 +244,4 @@ extern "C"
                              RTC::Delete<PresentationKeyDecoder>);
   }
   
-};
-
-
+}

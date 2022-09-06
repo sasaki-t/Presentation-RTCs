@@ -1,23 +1,18 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file  CVPresentation.h
  * @brief Presentation component using OpenCV
- * @date  $Date$
  *
  * @author 佐々木毅 (Takeshi SASAKI)
  * sasaki-t(_at_)ieee.org
  *
- * $Id$
  */
+// </rtc-template>
 
 #ifndef CVPRESENTATION_H
 #define CVPRESENTATION_H
 
-#include <rtm/Manager.h>
-#include <rtm/DataFlowComponentBase.h>
-#include <rtm/CorbaPort.h>
-#include <rtm/DataInPort.h>
-#include <rtm/DataOutPort.h>
 #include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/idl/ExtendedDataTypesSkel.h>
 #include <rtm/idl/InterfaceDataTypesSkel.h>
@@ -36,11 +31,18 @@
 
 // Service Consumer stub headers
 // <rtc-template block="consumer_stub_h">
+#include "BasicDataTypeStub.h"
 
 // </rtc-template>
 
-using namespace RTC;
+#include <rtm/Manager.h>
+#include <rtm/DataFlowComponentBase.h>
+#include <rtm/CorbaPort.h>
+#include <rtm/DataInPort.h>
+#include <rtm/DataOutPort.h>
 
+
+// <rtc-template block="component_description">
 /*!
  * @class CVPresentation
  * @brief Presentation component using OpenCV
@@ -77,7 +79,7 @@ using namespace RTC;
  * ポート名/型/説明
  * SlideNumberOut/TimedShort/現在のスライド番号。スライド番号が変更
  * された場合に出力される。
- * Key/TimeChar/スライドのウインドウがアクティブのときにキーボード
+ * Key/TimedChar/スライドのウインドウがアクティブのときにキーボード
  * から入力された値。
  * MouseEvent/TimedShortSeq/スライド上で発生したマウスイベント(CV_
  * EVENT_*:
@@ -90,6 +92,7 @@ using namespace RTC;
  * インタフェース。
  *
  */
+// </rtc-template>
 class CVPresentation
   : public RTC::DataFlowComponentBase
 {
@@ -103,7 +106,7 @@ class CVPresentation
   /*!
    * @brief destructor
    */
-  ~CVPresentation();
+  ~CVPresentation() override;
 
   // <rtc-template block="public_attribute">
   
@@ -113,32 +116,30 @@ class CVPresentation
   
   // </rtc-template>
 
+  // <rtc-template block="activity">
   /***
    *
    * The initialize action (on CREATED->ALIVE transition)
-   * formaer rtc_init_entry() 
    *
    * @return RTC::ReturnCode_t
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onInitialize();
+   RTC::ReturnCode_t onInitialize() override;
 
   /***
    *
    * The finalize action (on ALIVE->END transition)
-   * formaer rtc_exiting_entry()
    *
    * @return RTC::ReturnCode_t
    * 
    * 
    */
-  // virtual RTC::ReturnCode_t onFinalize();
+  // RTC::ReturnCode_t onFinalize() override;
 
   /***
    *
    * The startup action when ExecutionContext startup
-   * former rtc_starting_entry()
    *
    * @param ec_id target ExecutionContext Id
    *
@@ -146,12 +147,11 @@ class CVPresentation
    * 
    * 
    */
-  // virtual RTC::ReturnCode_t onStartup(RTC::UniqueId ec_id);
+  // RTC::ReturnCode_t onStartup(RTC::UniqueId ec_id) override;
 
   /***
    *
    * The shutdown action when ExecutionContext stop
-   * former rtc_stopping_entry()
    *
    * @param ec_id target ExecutionContext Id
    *
@@ -159,13 +159,12 @@ class CVPresentation
    * 
    * 
    */
-  // virtual RTC::ReturnCode_t onShutdown(RTC::UniqueId ec_id);
+  // RTC::ReturnCode_t onShutdown(RTC::UniqueId ec_id) override;
 
   /***
    * 初期化を行う。
    *
    * The activated action (Active state entry action)
-   * former rtc_active_entry()
    *
    * @param ec_id target ExecutionContext Id
    *
@@ -173,13 +172,12 @@ class CVPresentation
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onActivated(RTC::UniqueId ec_id);
+   RTC::ReturnCode_t onActivated(RTC::UniqueId ec_id) override;
 
   /***
    * 終了処理を行う。
    *
    * The deactivated action (Active state exit action)
-   * former rtc_active_exit()
    *
    * @param ec_id target ExecutionContext Id
    *
@@ -187,7 +185,7 @@ class CVPresentation
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onDeactivated(RTC::UniqueId ec_id);
+   RTC::ReturnCode_t onDeactivated(RTC::UniqueId ec_id) override;
 
   /***
    * InPortのSlideNumberInに入力された値に応じてスライドのページを
@@ -199,7 +197,6 @@ class CVPresentation
    * ら出力する。
    *
    * The execution action that is invoked periodically
-   * former rtc_active_do()
    *
    * @param ec_id target ExecutionContext Id
    *
@@ -207,13 +204,12 @@ class CVPresentation
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id);
+   RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id) override;
 
   /***
    * 終了処理を行う。
    *
    * The aborting action when main logic error occurred.
-   * former rtc_aborting_entry()
    *
    * @param ec_id target ExecutionContext Id
    *
@@ -221,12 +217,11 @@ class CVPresentation
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onAborting(RTC::UniqueId ec_id);
+   RTC::ReturnCode_t onAborting(RTC::UniqueId ec_id) override;
 
   /***
    *
    * The error action in ERROR state
-   * former rtc_error_do()
    *
    * @param ec_id target ExecutionContext Id
    *
@@ -234,12 +229,11 @@ class CVPresentation
    * 
    * 
    */
-  // virtual RTC::ReturnCode_t onError(RTC::UniqueId ec_id);
+  // RTC::ReturnCode_t onError(RTC::UniqueId ec_id) override;
 
   /***
    *
    * The reset action that is invoked resetting
-   * This is same but different the former rtc_init_entry()
    *
    * @param ec_id target ExecutionContext Id
    *
@@ -247,12 +241,11 @@ class CVPresentation
    * 
    * 
    */
-  // virtual RTC::ReturnCode_t onReset(RTC::UniqueId ec_id);
+  // RTC::ReturnCode_t onReset(RTC::UniqueId ec_id) override;
   
   /***
    *
    * The state update action that is invoked after onExecute() action
-   * no corresponding operation exists in OpenRTm-aist-0.2.0
    *
    * @param ec_id target ExecutionContext Id
    *
@@ -260,12 +253,11 @@ class CVPresentation
    * 
    * 
    */
-  // virtual RTC::ReturnCode_t onStateUpdate(RTC::UniqueId ec_id);
+  // RTC::ReturnCode_t onStateUpdate(RTC::UniqueId ec_id) override;
 
   /***
    *
    * The action that is invoked when execution context's rate is changed
-   * no corresponding operation exists in OpenRTm-aist-0.2.0
    *
    * @param ec_id target ExecutionContext Id
    *
@@ -273,7 +265,8 @@ class CVPresentation
    * 
    * 
    */
-  // virtual RTC::ReturnCode_t onRateChanged(RTC::UniqueId ec_id);
+  // RTC::ReturnCode_t onRateChanged(RTC::UniqueId ec_id) override;
+  // </rtc-template>
 
 
  protected:
@@ -290,7 +283,7 @@ class CVPresentation
   /*!
    * スライドが保存されているパス。
    * - Name: SlideFilePath SlideFilePath
-   * - DefaultValue: ./
+   * - DefaultValue: ../../../tutorial
    */
   std::string m_SlideFilePath;
   /*!
@@ -303,7 +296,7 @@ class CVPresentation
    * なお、スライドはOpenCVでサポートされている画像形式である必要が
    * ある。
    * - Name: SlideFileName SlideFileName
-   * - DefaultValue: test***.jpg
+   * - DefaultValue: tutorial***.png
    */
   std::string m_SlideFileName;
   /*!
@@ -378,11 +371,12 @@ class CVPresentation
    * - Constraint: x>0
    */
   int m_PenThickness;
+
   // </rtc-template>
 
   // DataInPort declaration
   // <rtc-template block="inport_declare">
-  TimedShort m_SlideNumberIn;
+  RTC::TimedShort m_SlideNumberIn;
   /*!
    * 表示するスライドの番号。
    * コンフィギュレーションを指定すれば、スライドの絶対番号(例:
@@ -391,8 +385,8 @@ class CVPresentation
    * - Type: TimedShort
    * - Number: 1
    */
-  InPort<TimedShort> m_SlideNumberInIn;
-  TimedShortSeq m_Pen;
+  RTC::InPort<RTC::TimedShort> m_SlideNumberInIn;
+  RTC::TimedShortSeq m_Pen;
   /*!
    * スライドに表示する線分・点の座標(x1,y1), (x2,y2),...。
    * コンフィギュレーションで指定されたパラメータで、座標が2点以上
@@ -401,8 +395,8 @@ class CVPresentation
    * - Type: TimedShortSeq
    * - Number: 偶数
    */
-  InPort<TimedShortSeq> m_PenIn;
-  TimedString m_Comment;
+  RTC::InPort<RTC::TimedShortSeq> m_PenIn;
+  RTC::TimedString m_Comment;
   /*!
    * スライドに表示するコメント（テキスト）。文字の大きさやサイズは
    * コメントにコマンドを含めることで指定することが可能。指定がない
@@ -410,29 +404,29 @@ class CVPresentation
    * 有効なのは半角英数字のみ。
    * - Type: TimedString
    */
-  InPort<TimedString> m_CommentIn;
+  RTC::InPort<RTC::TimedString> m_CommentIn;
   
   // </rtc-template>
 
 
   // DataOutPort declaration
   // <rtc-template block="outport_declare">
-  TimedShort m_SlideNumberOut;
+  RTC::TimedShort m_SlideNumberOut;
   /*!
    * 現在のスライド番号。スライド番号が変更された場合に出力される。
    * - Type: TimedShort
    * - Number: 1
    */
-  OutPort<TimedShort> m_SlideNumberOutOut;
-  TimedChar m_Key;
+  RTC::OutPort<RTC::TimedShort> m_SlideNumberOutOut;
+  RTC::TimedChar m_Key;
   /*!
    * スライドのウインドウがアクティブのときにキーボードから入力され
    * た値。
    * - Type: TimedChar
    * - Number: 1
    */
-  OutPort<TimedChar> m_KeyOut;
-  TimedShortSeq m_MouseEvent;
+  RTC::OutPort<RTC::TimedChar> m_KeyOut;
+  RTC::TimedShortSeq m_MouseEvent;
   /*!
    * スライド上で発生したマウスイベント(CV_EVENT_*:
    * 左ボタンが押された、など)、その座標(x,y)、フラグ(CV_EVENT_FLA
@@ -440,7 +434,7 @@ class CVPresentation
    * - Type: TimedShortSeq
    * - Number: 4
    */
-  OutPort<TimedShortSeq> m_MouseEventOut;
+  RTC::OutPort<RTC::TimedShortSeq> m_MouseEventOut;
   
   // </rtc-template>
 
@@ -463,7 +457,7 @@ class CVPresentation
    * - PreCondition:  コンポーネントをアクティブ化し、スライドを正
    *                  しく読み込んだ後に有効。
    */
-  SlideSizeInfoSVC_impl m_SlideSizeInfo;
+  Slide_SlideSizeInfoSVC_impl m_SlideSizeInfo;
   
   // </rtc-template>
 
@@ -472,13 +466,14 @@ class CVPresentation
   
   // </rtc-template>
 
+
  private:
   // <rtc-template block="private_attribute">
-  Slides slds;
-  CommentManager cmtMgr;
-  std::string window_name;
-  cv::Mat display_img; //slide with comments  
-  
+	 Slides slds;
+	 CommentManager cmtMgr;
+	 std::string window_name;
+	 cv::Mat display_img; //slide with comments  
+
   // </rtc-template>
 
   // <rtc-template block="private_operation">

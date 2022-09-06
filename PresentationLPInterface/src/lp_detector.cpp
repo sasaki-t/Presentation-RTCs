@@ -81,7 +81,7 @@ void LPDetector::setBackgroundImage(cv::Mat &back_img){
 		if(back_img.channels() == 1){ //gray scale image
 			bg = back_img;
 		}else{ //bgr image -> convert to gray scale image
-			cv::cvtColor(back_img,bg,CV_BGR2GRAY);
+			cv::cvtColor(back_img,bg,cv::COLOR_BGR2GRAY);
 		}
 	}else{
 		bg.release();
@@ -106,7 +106,7 @@ int LPDetector::detect(cv::Mat &frame, cv::Point &pt_detected, cv::Point th_ipos
 	if(frame.channels() == 1){ //gray image
 		frame_gray = frame;
 	}else{
-		cv::cvtColor(frame,frame_gray,CV_BGR2GRAY);
+		cv::cvtColor(frame,frame_gray,cv::COLOR_BGR2GRAY);
 	}
 
 	if((th_ipos_min.x<0)||(th_ipos_min.x>frame.cols)){th_ipos_min.x=0;}
@@ -167,7 +167,7 @@ int LPDetector::detect(cv::Mat &frame, cv::Point &pt_detected, cv::Point th_wpos
 	if(frame.channels() == 1){ //gray image
 		frame_gray = frame;
 	}else{
-		cv::cvtColor(frame,frame_gray,CV_BGR2GRAY);
+		cv::cvtColor(frame,frame_gray,cv::COLOR_BGR2GRAY);
 	}
 
 	for(y=0;y<frame.rows;y++){ //for each line

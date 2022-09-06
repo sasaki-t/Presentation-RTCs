@@ -1,4 +1,4 @@
-// -*-C++-*-
+﻿// -*-C++-*-
 /*!
  * @file  SlideSizeSVC_impl.cpp
  * @brief Service implementation code of SlideSize.idl
@@ -13,15 +13,15 @@
 /*
  * Example implementational code for IDL interface Slide::SlideSizeInfo
  */
-SlideSizeInfoSVC_impl::SlideSizeInfoSVC_impl()
+Slide_SlideSizeInfoSVC_impl::Slide_SlideSizeInfoSVC_impl()
 {
   // Please add extra constructor code here.
-  slide_width = -1;
-  slide_height = -1;
+	slide_width = -1;
+	slide_height = -1;
 }
 
 
-SlideSizeInfoSVC_impl::~SlideSizeInfoSVC_impl()
+Slide_SlideSizeInfoSVC_impl::~Slide_SlideSizeInfoSVC_impl()
 {
   // Please add extra destructor code here.
 }
@@ -30,16 +30,16 @@ SlideSizeInfoSVC_impl::~SlideSizeInfoSVC_impl()
 /*
  * Methods corresponding to IDL attributes and operations
  */
-CORBA::Short SlideSizeInfoSVC_impl::getWidth()
+::CORBA::Short Slide_SlideSizeInfoSVC_impl::getWidth()
 {
   // Please insert your code here and remove the following warning pragma
-  return slide_width;
+	return slide_width;
 }
 
-CORBA::Short SlideSizeInfoSVC_impl::getHeight()
+::CORBA::Short Slide_SlideSizeInfoSVC_impl::getHeight()
 {
   // Please insert your code here and remove the following warning pragma
-  return slide_height;
+	return slide_height;
 }
 
 

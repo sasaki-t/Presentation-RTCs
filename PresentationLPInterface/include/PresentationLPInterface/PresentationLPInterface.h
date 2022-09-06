@@ -1,23 +1,18 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file  PresentationLPInterface.h
  * @brief Create slide change and draw commands for presentation component based on laser light pointing
- * @date  $Date$
  *
  * @author 佐々木毅 (Takeshi SASAKI)
  * sasaki-t(_at_)ieee.org
  *
- * $Id$
  */
+// </rtc-template>
 
 #ifndef PRESENTATIONLPINTERFACE_H
 #define PRESENTATIONLPINTERFACE_H
 
-#include <rtm/Manager.h>
-#include <rtm/DataFlowComponentBase.h>
-#include <rtm/CorbaPort.h>
-#include <rtm/DataInPort.h>
-#include <rtm/DataOutPort.h>
 #include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/idl/ExtendedDataTypesSkel.h>
 #include <rtm/idl/InterfaceDataTypesSkel.h>
@@ -33,13 +28,19 @@
 // Service Consumer stub headers
 // <rtc-template block="consumer_stub_h">
 #include "SlideSizeStub.h"
-#include "ImgStub.h"
+#include "CameraCommonInterfaceStub.h"
+#include "BasicDataTypeStub.h"
 
 // </rtc-template>
 
-using namespace RTC;
-using namespace Img;
+#include <rtm/Manager.h>
+#include <rtm/DataFlowComponentBase.h>
+#include <rtm/CorbaPort.h>
+#include <rtm/DataInPort.h>
+#include <rtm/DataOutPort.h>
 
+
+// <rtc-template block="component_description">
 /*!
  * @class PresentationLPInterface
  * @brief Create slide change and draw commands for presentation component based on laser light pointing
@@ -74,6 +75,7 @@ using namespace Img;
  * インタフェース。
  *
  */
+// </rtc-template>
 class PresentationLPInterface
   : public RTC::DataFlowComponentBase
 {
@@ -87,7 +89,7 @@ class PresentationLPInterface
   /*!
    * @brief destructor
    */
-  ~PresentationLPInterface();
+  ~PresentationLPInterface() override;
 
   // <rtc-template block="public_attribute">
   
@@ -97,32 +99,30 @@ class PresentationLPInterface
   
   // </rtc-template>
 
+  // <rtc-template block="activity">
   /***
    *
    * The initialize action (on CREATED->ALIVE transition)
-   * formaer rtc_init_entry() 
    *
    * @return RTC::ReturnCode_t
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onInitialize();
+   RTC::ReturnCode_t onInitialize() override;
 
   /***
    *
    * The finalize action (on ALIVE->END transition)
-   * formaer rtc_exiting_entry()
    *
    * @return RTC::ReturnCode_t
    * 
    * 
    */
-  // virtual RTC::ReturnCode_t onFinalize();
+  // RTC::ReturnCode_t onFinalize() override;
 
   /***
    *
    * The startup action when ExecutionContext startup
-   * former rtc_starting_entry()
    *
    * @param ec_id target ExecutionContext Id
    *
@@ -130,12 +130,11 @@ class PresentationLPInterface
    * 
    * 
    */
-  // virtual RTC::ReturnCode_t onStartup(RTC::UniqueId ec_id);
+  // RTC::ReturnCode_t onStartup(RTC::UniqueId ec_id) override;
 
   /***
    *
    * The shutdown action when ExecutionContext stop
-   * former rtc_stopping_entry()
    *
    * @param ec_id target ExecutionContext Id
    *
@@ -143,13 +142,12 @@ class PresentationLPInterface
    * 
    * 
    */
-  // virtual RTC::ReturnCode_t onShutdown(RTC::UniqueId ec_id);
+  // RTC::ReturnCode_t onShutdown(RTC::UniqueId ec_id) override;
 
   /***
    * 初期化を行う。
    *
    * The activated action (Active state entry action)
-   * former rtc_active_entry()
    *
    * @param ec_id target ExecutionContext Id
    *
@@ -157,12 +155,11 @@ class PresentationLPInterface
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onActivated(RTC::UniqueId ec_id);
+   RTC::ReturnCode_t onActivated(RTC::UniqueId ec_id) override;
 
   /***
    *
    * The deactivated action (Active state exit action)
-   * former rtc_active_exit()
    *
    * @param ec_id target ExecutionContext Id
    *
@@ -170,7 +167,7 @@ class PresentationLPInterface
    * 
    * 
    */
-  // virtual RTC::ReturnCode_t onDeactivated(RTC::UniqueId ec_id);
+  // RTC::ReturnCode_t onDeactivated(RTC::UniqueId ec_id) override;
 
   /***
    * InPortのImageから読み込んだ画像から、スライド上のレーザポイン
@@ -180,7 +177,6 @@ class PresentationLPInterface
    * れ出力する。
    *
    * The execution action that is invoked periodically
-   * former rtc_active_do()
    *
    * @param ec_id target ExecutionContext Id
    *
@@ -188,12 +184,11 @@ class PresentationLPInterface
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id);
+   RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id) override;
 
   /***
    *
    * The aborting action when main logic error occurred.
-   * former rtc_aborting_entry()
    *
    * @param ec_id target ExecutionContext Id
    *
@@ -201,12 +196,11 @@ class PresentationLPInterface
    * 
    * 
    */
-  // virtual RTC::ReturnCode_t onAborting(RTC::UniqueId ec_id);
+  // RTC::ReturnCode_t onAborting(RTC::UniqueId ec_id) override;
 
   /***
    *
    * The error action in ERROR state
-   * former rtc_error_do()
    *
    * @param ec_id target ExecutionContext Id
    *
@@ -214,12 +208,11 @@ class PresentationLPInterface
    * 
    * 
    */
-  // virtual RTC::ReturnCode_t onError(RTC::UniqueId ec_id);
+  // RTC::ReturnCode_t onError(RTC::UniqueId ec_id) override;
 
   /***
    *
    * The reset action that is invoked resetting
-   * This is same but different the former rtc_init_entry()
    *
    * @param ec_id target ExecutionContext Id
    *
@@ -227,12 +220,11 @@ class PresentationLPInterface
    * 
    * 
    */
-  // virtual RTC::ReturnCode_t onReset(RTC::UniqueId ec_id);
+  // RTC::ReturnCode_t onReset(RTC::UniqueId ec_id) override;
   
   /***
    *
    * The state update action that is invoked after onExecute() action
-   * no corresponding operation exists in OpenRTm-aist-0.2.0
    *
    * @param ec_id target ExecutionContext Id
    *
@@ -240,12 +232,11 @@ class PresentationLPInterface
    * 
    * 
    */
-  // virtual RTC::ReturnCode_t onStateUpdate(RTC::UniqueId ec_id);
+  // RTC::ReturnCode_t onStateUpdate(RTC::UniqueId ec_id) override;
 
   /***
    *
    * The action that is invoked when execution context's rate is changed
-   * no corresponding operation exists in OpenRTm-aist-0.2.0
    *
    * @param ec_id target ExecutionContext Id
    *
@@ -253,7 +244,8 @@ class PresentationLPInterface
    * 
    * 
    */
-  // virtual RTC::ReturnCode_t onRateChanged(RTC::UniqueId ec_id);
+  // RTC::ReturnCode_t onRateChanged(RTC::UniqueId ec_id) override;
+  // </rtc-template>
 
 
  protected:
@@ -355,31 +347,32 @@ class PresentationLPInterface
    * - Constraint: x>=0
    */
   double m_SlideChangeWait;
+
   // </rtc-template>
 
   // DataInPort declaration
   // <rtc-template block="inport_declare">
-  TimedCameraImage m_Image;
+  Img::TimedCameraImage m_Image;
   /*!
    * 入力画像及び座標変換のためのカメラパラメータ。
    * - Type: TimedCameraImage
    * - Number: 1
    */
-  InPort<TimedCameraImage> m_ImageIn;
-  TimedShort m_BgUpdateTrigger;
+  RTC::InPort<Img::TimedCameraImage> m_ImageIn;
+  RTC::TimedShort m_BgUpdateTrigger;
   /*!
    * 何かデータが入力された場合、背景画像を更新する。
    * - Type: TimedShort
    * - Number: 1
    */
-  InPort<TimedShort> m_BgUpdateTriggerIn;
+  RTC::InPort<RTC::TimedShort> m_BgUpdateTriggerIn;
   
   // </rtc-template>
 
 
   // DataOutPort declaration
   // <rtc-template block="outport_declare">
-  TimedShort m_SlideRelativeCommand;
+  RTC::TimedShort m_SlideRelativeCommand;
   /*!
    * スライドのページを変更するためのコマンドに対応する数値。コンフ
    * ィギュレーションのSlideChangeAreaとSlideChangeAreaSizeで指定さ
@@ -388,8 +381,8 @@ class PresentationLPInterface
    * - Type: TimedShort
    * - Number: 1
    */
-  OutPort<TimedShort> m_SlideRelativeCommandOut;
-  TimedShortSeq m_DrawPositions;
+  RTC::OutPort<RTC::TimedShort> m_SlideRelativeCommandOut;
+  RTC::TimedShortSeq m_DrawPositions;
   /*!
    * 検出された点の中で最も輝度の差が高い点の位置(x,y)。コンフィギ
    * ュレーションのDetectUpdateTime以内に新たに点が検出された場合は
@@ -398,7 +391,7 @@ class PresentationLPInterface
    * - Type: TimedShortSeq
    * - Number: 2または4
    */
-  OutPort<TimedShortSeq> m_DrawPositionsOut;
+  RTC::OutPort<RTC::TimedShortSeq> m_DrawPositionsOut;
   
   // </rtc-template>
 
@@ -426,15 +419,16 @@ class PresentationLPInterface
   
   // </rtc-template>
 
+
  private:
   // <rtc-template block="private_attribute">
-  LPDetector lpd;
-  bool bg_update; //if true, update background
-  int area_index;
-  int area_count;
+	 LPDetector lpd;
+	 bool bg_update; //if true, update background
+	 int area_index;
+	 int area_count;
 
-  RTC::Time time_old; //previously detected time
-  cv::Point ptSc_old; //point detected in the previous time
+	 RTC::Time time_old; //previously detected time
+	 cv::Point ptSc_old; //point detected in the previous time
   // </rtc-template>
 
   // <rtc-template block="private_operation">
